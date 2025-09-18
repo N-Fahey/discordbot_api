@@ -4,5 +4,5 @@ from fastapi.responses import JSONResponse
 router = APIRouter(prefix='/bank')
 
 @router.get('')
-def bank_test() -> JSONResponse:
+def root() -> JSONResponse:
     return JSONResponse({'message': 'Bank, get'}), 200
