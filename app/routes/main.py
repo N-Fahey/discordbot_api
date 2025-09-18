@@ -10,3 +10,4 @@ router.include_router(ai_router)
 router.include_router(bank_router)
 router.include_router(scores_router)
 router.include_router(users_router)
+
