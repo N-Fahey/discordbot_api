@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Integer, BigInteger, String, DateTime, ForeignKey
+from sqlalchemy import Integer, BigInteger, String, DateTime, ForeignKey, select
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -12,6 +12,19 @@ class AIMessage(Base):
     conversation_id: Mapped[int] = mapped_column('conversation_id', BigInteger, nullable=False)
     message_id: Mapped[int] = mapped_column('message_id', BigInteger, nullable=False, unique=True)
     text: Mapped[str] = mapped_column('text', String(2000), nullable=False)
+
+    @classmethod
+    async def get_conversation(cls, session: AsyncSession, message_id:int):
+        stmt_single = select(AIMessage).where(AIMessage.message_id == message_id)
+        ref_message = await session.scalar(stmt_single)
+
+        if ref_message is None:
+            raise ValueError("Message not found")
+        
+        stmt_many = select(AIMessage).where(AIMessage.conversation_id == ref_message.conversation_id)
+        conversation_stream = await session.stream_scalars(stmt_many)
+        async for message in conversation_stream:
+            yield message
 
     @classmethod
     async def add_message(cls, session: AsyncSession, user_id:int, conversation_id:int, message_id:int, text:str):

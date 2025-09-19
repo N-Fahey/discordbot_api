@@ -17,6 +17,11 @@ class SingleMessageSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ConversationSchema(BaseModel):
+    conversation: list[SingleMessageSchema]
+
+    model_config = ConfigDict(from_attributes=True)
+
 class AddMessageRequestSchema(BaseModel):
     uid:int | None
     conversation_id:int

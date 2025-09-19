@@ -4,6 +4,13 @@ from app.database import DBSessionDep
 from app.model import User, AIMessage
 from .schemas import SingleMessageSchema
 
+class GetConversation:
+    def __init__(self, session: DBSessionDep):
+        self.session = session
+    
+    async def execute(self, message_id:int):
+        pass
+
 class AddMessage:
     def __init__(self, session: DBSessionDep):
         self.session = session
