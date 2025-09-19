@@ -6,7 +6,7 @@ from .functions import GetBalanceByUID, GetDoleByUID, GetTopNBalances, DepositAm
 router = APIRouter(prefix='/bank')
 
 @router.get('/get_balance', response_model=SingleBalanceSchema, responses={404: {'model':HTTPError}})
-async def get_balance_by_uid(user_id:int = 0, function: GetBalanceByUID = Depends(GetBalanceByUID)) -> SingleBalanceSchema:
+async def get_balance_by_uid(user_id:int, function: GetBalanceByUID = Depends(GetBalanceByUID)) -> SingleBalanceSchema:
     '''Get a single user's bank balance by Discord unique ID'''
     user_bank = await function.execute(user_id)
     return user_bank
