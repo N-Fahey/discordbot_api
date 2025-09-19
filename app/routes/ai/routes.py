@@ -7,7 +7,3 @@ from .usage.routes import router as router_usage
 router = APIRouter(prefix='/ai')
 router.include_router(router_messages)
 router.include_router(router_usage)
-
-@router.get('', include_in_schema=False)
-def ai_base() -> JSONResponse:
-    return JSONResponse({'message': 'AI section'}), 200

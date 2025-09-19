@@ -6,3 +6,7 @@ router = APIRouter(prefix='/messages')
 @router.get('')
 async def messages_test() -> JSONResponse:
     return JSONResponse({'message': "Messages, get"}), 200
+
+#TODO: Add message
+
+#TODO: Read conversation from message ID

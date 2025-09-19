@@ -12,7 +12,7 @@ class User(Base):
     uid: Mapped[int] = mapped_column('uid', BigInteger, unique=True, nullable=False)
     username: Mapped[str] = mapped_column('username', String(64), unique=True, nullable=False)
     display_name: Mapped[str] = mapped_column('display_name', String(64), nullable=False)
-    bank: Mapped[int] = mapped_column('bank', Integer, nullable=False, default=0)
+    balance: Mapped[int] = mapped_column('balance', Integer, nullable=False, default=0)
     last_dole: Mapped[Optional[datetime]] = mapped_column('last_dole', DateTime, nullable=True)
 
     @classmethod
@@ -29,3 +29,30 @@ class User(Base):
         user = await session.scalar(stmt)
 
         return user
+    
+    @classmethod
+    async def get_users_with_balance(cls, session: AsyncSession, user_count:int | None = None):
+        stmt = select(User).where(User.balance > 0).order_by(User.balance.desc()).limit(user_count)
+        user_stream = await session.stream_scalars(stmt)
+
+        async for user in user_stream:
+            yield user
+    
+    @staticmethod
+    async def transfer(session: AsyncSession, from_user:'User', to_user:'User', amount:int) -> None:
+        if from_user.balance < amount:
+            raise ValueError("Amount to withdraw greater than balance.")
+
+        from_user.balance -= amount
+        to_user.balance += amount
+        await session.flush()
+    
+    async def deposit(self, session: AsyncSession, amount: int) -> None:
+        self.balance += amount
+        await session.flush()
+    
+    async def withdraw(self, session: AsyncSession, amount: int) -> None:
+        if self.balance < amount:
+            raise ValueError("Amount to withdraw greater than balance.")
+        self.balance -= amount
+        await session.flush()

@@ -6,3 +6,5 @@ router = APIRouter(prefix='/scores')
 @router.get('')
 def scores_test() -> JSONResponse:
     return JSONResponse({'message': 'Scores, get'}), 200
+
+#TODO: Add win

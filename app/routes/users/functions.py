@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 from app.database import DBSessionDep
 from app.model import User
-from .schemas import SingleUser
+from .schemas import SingleUserSchema
 
 
 #Test add user
@@ -15,7 +15,7 @@ class CreateUser:
         async with self.session.begin() as session:
             #TODO: Validate user doesnt already exist with uid or username
             new_user = await User.create_user(session, uid, username, display_name)
-            return SingleUser.model_validate(new_user)
+            return SingleUserSchema.model_validate(new_user)
 
 class GetUserByUID:
     def __init__(self, session: DBSessionDep):
@@ -28,4 +28,4 @@ class GetUserByUID:
 
             if user is None:
                 raise HTTPException(status_code=404, detail="User not found.")
-            return SingleUser.model_validate(user)
+            return SingleUserSchema.model_validate(user)
