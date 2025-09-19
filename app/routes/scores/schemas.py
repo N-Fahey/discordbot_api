@@ -19,6 +19,6 @@ class SingleScoreSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 class AddScoreByNameRequestSchema(BaseModel):
-    user_id: int
+    uid: int
     game_name: str = Field(..., min_length=1)
     amount_won: int | None = None

@@ -12,6 +12,6 @@ def scores_test() -> JSONResponse:
 
 @router.post('/add_score', response_model=SingleScoreSchema, responses={404: {'model':HTTPError}})
 async def add_score(data: AddScoreByNameRequestSchema, function: AddScoreByGameName = Depends(AddScoreByGameName)) -> SingleScoreSchema:
-    new_score = await function.execute(data.user_id, data.game_name, data.amount_won)
+    new_score = await function.execute(data.uid, data.game_name, data.amount_won)
 
-    return SingleScoreSchema.model_validate(new_score)
+    return new_score
