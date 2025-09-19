@@ -1,6 +1,7 @@
 from datetime import datetime
-from sqlalchemy import Integer, String, DateTime, ForeignKey
+from sqlalchemy import Integer, String, DateTime, ForeignKey, select
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .main import Base
 
@@ -9,9 +10,30 @@ class Game(Base):
     id: Mapped[int] = mapped_column('id', Integer, primary_key=True, autoincrement=True, nullable=False)
     name: Mapped[str] = mapped_column('name', String(100), unique=True, nullable=False)
 
+    @classmethod
+    async def get_game_by_name(cls, session: AsyncSession, game_name:str) -> 'Game':
+        stmt = select(Game).where(Game.name == game_name)
+        game = await session.scalar(stmt)
+
+        return game
+
 class Score(Base):
     __tablename__ = 'bot_scores'
     id: Mapped[int] = mapped_column('id', Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id: Mapped[int] = mapped_column('user_id', ForeignKey('bot_users.id'))
     game_id: Mapped[int] = mapped_column('game_id', ForeignKey('bot_games.id'))
-    timestamp: Mapped[datetime] = mapped_column('timestamp', DateTime, nullable=False)
+    amount_won: Mapped[int] = mapped_column('amount_won', Integer, nullable=False)
+    timestamp: Mapped[datetime] = mapped_column('timestamp', DateTime, nullable=False, default=datetime.now())
+
+    @classmethod
+    async def add_score_by_game_name(cls, session: AsyncSession, uid:int, game_name:str, amount_won:int | None = None):
+        game = await Game.get_game_by_name(session, game_name)
+
+        if game is None:
+            raise ValueError(f'No game found with name {game_name}')
+
+        new_score = Score(user_id = uid, game_id = game.id, amount_won = amount_won)
+        session.add(new_score)
+        await session.flush()
+
+        return new_score
