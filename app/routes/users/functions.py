@@ -28,4 +28,5 @@ class GetUserByUID:
 
             if user is None:
                 raise HTTPException(status_code=404, detail="User not found.")
+            
             return SingleUserSchema.model_validate(user)
