@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
 
 from .functions import CreateUser, GetUserByUID
 from .schemas import HTTPError, SingleUserSchema, CreateUserRequestSchema

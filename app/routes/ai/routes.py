@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
 from .messages.routes import router as router_messages
 from .usage.routes import router as router_usage
