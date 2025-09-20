@@ -7,8 +7,9 @@ router = APIRouter(prefix='/messages')
 
 @router.get('/get_conversation', response_model=ConversationSchema, responses={404: {'model':HTTPError}})
 async def get_conversation(message_id:int, function: GetConversation = Depends(GetConversation)) -> ConversationSchema:
-    #TODO: Get conversation from message ID
-    pass
+    conversation = await function.execute(message_id)
+
+    return conversation
 
 @router.post('/add_message', response_model=SingleMessageSchema, responses={404: {'model':HTTPError}})
 async def add_message(data: AddMessageRequestSchema, function: AddMessage = Depends(AddMessage)) -> SingleMessageSchema:

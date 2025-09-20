@@ -9,10 +9,9 @@ class HTTPError(BaseModel):
         }
 
 class SingleMessageSchema(BaseModel):
-    id: int
-    user_id: int | None
     conversation_id: int
     message_id: int
+    user_id: int | None
     text: str
 
     model_config = ConfigDict(from_attributes=True)
