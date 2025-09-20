@@ -16,6 +16,14 @@ class Game(Base):
         game = await session.scalar(stmt)
 
         return game
+    
+    @classmethod
+    async def add_game(cls, session: AsyncSession, game_name:str):
+        new_game = cls(name=game_name)
+        session.add(new_game)
+        await session.flush()
+
+        return new_game
 
 class Score(Base):
     __tablename__ = 'bot_scores'
