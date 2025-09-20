@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Optional
 from datetime import datetime
 from sqlalchemy import Integer, BigInteger, String, DateTime, select
@@ -39,7 +41,7 @@ class User(Base):
             yield user
     
     @staticmethod
-    async def transfer(session: AsyncSession, from_user:'User', to_user:'User', amount:int) -> None:
+    async def transfer(session: AsyncSession, from_user:User, to_user:User, amount:int):
         if from_user.balance < amount:
             raise ValueError("Amount to withdraw greater than balance.")
 
@@ -47,11 +49,11 @@ class User(Base):
         to_user.balance += amount
         await session.flush()
     
-    async def deposit(self, session: AsyncSession, amount: int) -> None:
+    async def deposit(self, session: AsyncSession, amount: int):
         self.balance += amount
         await session.flush()
     
-    async def withdraw(self, session: AsyncSession, amount: int) -> None:
+    async def withdraw(self, session: AsyncSession, amount: int):
         if self.balance < amount:
             raise ValueError("Amount to withdraw greater than balance.")
         self.balance -= amount

@@ -16,7 +16,7 @@ class AIMessage(Base):
     text: Mapped[str] = mapped_column('text', String(2000), nullable=False)
 
     @classmethod
-    async def get_message(cls, session:AsyncSession, message_id:int) -> AIMessage:
+    async def get_message(cls, session:AsyncSession, message_id:int):
         stmt_single = select(AIMessage).where(AIMessage.message_id == message_id)
         message = await session.scalar(stmt_single)
 

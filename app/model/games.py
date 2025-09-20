@@ -11,7 +11,7 @@ class Game(Base):
     name: Mapped[str] = mapped_column('name', String(100), unique=True, nullable=False)
 
     @classmethod
-    async def get_game_by_name(cls, session: AsyncSession, game_name:str) -> 'Game':
+    async def get_game_by_name(cls, session: AsyncSession, game_name:str):
         stmt = select(Game).where(Game.name == game_name)
         game = await session.scalar(stmt)
 
