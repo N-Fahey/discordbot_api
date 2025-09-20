@@ -24,9 +24,6 @@ class AIMessage(Base):
 
     @classmethod
     async def get_conversation(cls, session: AsyncSession, message: AIMessage):
-        # stmt_single = select(AIMessage).where(AIMessage.message_id == message_id)
-        # ref_message = await session.scalar(stmt_single)
-
         if message is None:
             raise ValueError("Message not found")
         
