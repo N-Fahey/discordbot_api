@@ -13,7 +13,10 @@ class CreateUser:
     async def execute(self, uid:int, username:str, display_name:str):
 
         async with self.session.begin() as session:
-            #TODO: Validate user doesnt already exist with uid or username
+            existing_user = await User.check_user_exists(session, uid, username)
+            if existing_user:
+                raise HTTPException(status_code=409, detail=f"User already exists.")
+            
             new_user = await User.create_user(session, uid, username, display_name)
             return SingleUserSchema.model_validate(new_user)
 

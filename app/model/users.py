@@ -18,13 +18,23 @@ class User(Base):
     last_dole: Mapped[Optional[datetime]] = mapped_column('last_dole', DateTime, nullable=True)
 
     @classmethod
+    async def check_user_exists(cls, session: AsyncSession, uid:int | None = None, username:str | None = None):
+        if not uid and not username:
+            return None
+
+        stmt = select(User).where((User.uid == uid) | (User.username == username))
+        existing_user = await session.scalar(stmt)
+        
+        return bool(existing_user)
+
+    @classmethod
     async def create_user(cls, session: AsyncSession, uid:int, username:str, display_name:str):
         new_user = User(uid=uid, username=username, display_name=display_name)
         session.add(new_user)
         await session.flush()
 
         return new_user
-    
+
     @classmethod
     async def get_user_by_uid(cls, session: AsyncSession, uid:int):
         stmt = select(User).where(User.uid == uid)
