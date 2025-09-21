@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from app.database import DBSessionDep
+from app.db import DBSessionDep
 from app.model import User
 from .schemas import SingleUserSchema
 
