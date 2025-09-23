@@ -11,17 +11,3 @@ docker run -d \
   -p 127.0.0.1:8000:8000 \
   discordbot-api:latest
 ```
-
-```
-docker run -d \
-  -e "DB_USER=bot_api_test" \
-  -e "DB_PASSWORD=changeme" \
-  -e "DB_HOST=203.28.238.188" \
-  -e "DB_PORT=3306" \
-  -e "DB_NAME=bot_api_test" \
-  -h localhost \
-  -p 127.0.0.1:8000:8000 \
-  discordbot-api:latest
-```
-
-uvicorn app:main --log-config log_settings.yaml --log-level info
