@@ -11,7 +11,7 @@ async def get_conversation(message_id:int, function: GetConversation = Depends(G
 
     return conversation
 
-@router.post('/add_message', response_model=SingleMessageSchema, responses={404: {'model':HTTPError}})
+@router.post('/add_message', status_code=201, response_model=SingleMessageSchema, responses={404: {'model':HTTPError}})
 async def add_message(data: AddMessageRequestSchema, function: AddMessage = Depends(AddMessage)) -> SingleMessageSchema:
     new_message = await function.execute(data.uid, data.conversation_id, data.message_id, data.text)
 
