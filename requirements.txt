@@ -1,4 +1,0 @@
-alembic>=1.16.5
-fastapi[standard]>=0.117.1
-sqlalchemy>=2.0.43
-aiomysql>=0.2.0
