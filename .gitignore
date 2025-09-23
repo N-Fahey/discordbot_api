@@ -7,4 +7,5 @@
 #Local files
 .vscode/
 __pycache__/
+*.log*
 dev_*
