@@ -19,6 +19,11 @@ class SingleUserSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ManyUserSchema(BaseModel):
+    users: list[SingleUserSchema]
+
+    model_config = ConfigDict(from_attributes=True)
+
 class CreateUserRequestSchema(BaseModel):
     uid: int
     username: str = Field(..., min_length=2, max_length=32)

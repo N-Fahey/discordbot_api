@@ -50,6 +50,14 @@ class User(Base):
         async for user in user_stream:
             yield user
     
+    @classmethod
+    async def get_all_users(cls, session: AsyncSession):
+        stmt = select(User)
+        user_stream = await session.stream_scalars(stmt)
+
+        async for user in user_stream:
+            yield user
+    
     @staticmethod
     async def transfer(session: AsyncSession, from_user:User, to_user:User, amount:int):
         if from_user.balance < amount:

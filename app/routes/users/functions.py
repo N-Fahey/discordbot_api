@@ -2,10 +2,8 @@ from fastapi import HTTPException
 
 from app.db import DBSessionDep
 from app.model import User
-from .schemas import SingleUserSchema
+from .schemas import SingleUserSchema, ManyUserSchema
 
-
-#Test add user
 class CreateUser:
     def __init__(self, session: DBSessionDep):
         self.session = session
@@ -33,3 +31,18 @@ class GetUserByUID:
                 raise HTTPException(status_code=404, detail="User not found.")
             
             return SingleUserSchema.model_validate(user)
+
+class GetAllUsers:
+    def __init__(self, session: DBSessionDep):
+        self.session = session
+    
+    async def execute(self):
+        
+        async with self.session.begin() as session:
+            users = [user async for user in User.get_all_users(session)]
+
+            return_dict = {
+                'users': users
+            }
+
+            return ManyUserSchema.model_validate(return_dict)
