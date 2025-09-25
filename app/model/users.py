@@ -84,3 +84,8 @@ class User(Base):
             self.display_name = display_name
         
         await session.flush()
+    
+    async def update_dole(self, session: AsyncSession):
+        self.last_dole = datetime.now()
+
+        await session.flush()

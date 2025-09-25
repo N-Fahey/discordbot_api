@@ -30,6 +30,21 @@ class GetDoleByUID:
             
             return SingleDoleSchema.model_validate(user)
 
+class UpdateDoleByUID:
+    def __init__(self, session: DBSessionDep):
+        self.session = session
+
+    async def execute(self, uid:int):
+
+        async with self.session.begin() as session:
+            user = await User.get_user_by_uid(session, uid)
+            if user is None:
+                raise HTTPException(status_code=404, detail="User not found.")
+            
+            await user.update_dole(session)
+
+            return SingleDoleSchema.model_validate(user)
+
 class GetTopNBalances:
     def __init__(self, session: DBSessionDep):
         self.session = session

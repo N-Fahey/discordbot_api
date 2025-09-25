@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from .schemas import HTTPError, SingleBalanceSchema, ManyBalanceSchema, TransferBalancesSchema, SingleDoleSchema, SingleBalanceRequestSchema, TransferAmountRequestSchema
-from .functions import GetBalanceByUID, GetDoleByUID, GetTopNBalances, DepositAmountByUID, WithdrawAmountByUID, TransferAmountByUIDs
+from .functions import GetBalanceByUID, GetDoleByUID, UpdateDoleByUID, GetTopNBalances, DepositAmountByUID, WithdrawAmountByUID, TransferAmountByUIDs
 
 router = APIRouter(prefix='/bank')
 
@@ -11,6 +11,13 @@ async def get_balance_by_uid(user_id:int, function: GetBalanceByUID = Depends(Ge
     user_bank = await function.execute(user_id)
     return user_bank
 
+@router.get('/get_balances', response_model=ManyBalanceSchema)
+async def get_top_n_balances(num_balances:int = 0, function:GetTopNBalances = Depends(GetTopNBalances)):
+    '''Get a list of N user bank balances, in descending order. Ignores users with no balance. Set to 0 to get all'''
+    user_banks = await function.execute(num_balances)
+
+    return user_banks
+
 @router.get('/get_dole', response_model=SingleDoleSchema, responses={404: {'model':HTTPError}})
 async def get_dole_by_uid(user_id:int, function:GetDoleByUID = Depends(GetDoleByUID)):
     '''Get a single user's last dole timestamp'''
@@ -18,12 +25,12 @@ async def get_dole_by_uid(user_id:int, function:GetDoleByUID = Depends(GetDoleBy
 
     return user_dole
 
-@router.get('/get_balances', response_model=ManyBalanceSchema)
-async def get_top_n_balances(num_balances:int = 0, function:GetTopNBalances = Depends(GetTopNBalances)):
-    '''Get a list of N user bank balances, in descending order. Ignores users with no balance. Set to 0 to get all'''
-    user_banks = await function.execute(num_balances)
+@router.post('/update_dole', response_model=SingleDoleSchema, responses={404: {'model':HTTPError}})
+async def update_dole_by_uid(user_id:int, function:UpdateDoleByUID = Depends(UpdateDoleByUID)):
+    '''Update a single user's last dole timestamp to now'''
+    user_dole = await function.execute(user_id)
 
-    return user_banks
+    return user_dole
 
 @router.post('/deposit', response_model=SingleBalanceSchema, responses={404: {'model':HTTPError}})
 async def deposit_by_uid(data: SingleBalanceRequestSchema, function: DepositAmountByUID = Depends(DepositAmountByUID)) -> SingleBalanceSchema:
