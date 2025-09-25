@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from .functions import CreateUser, GetUserByUID, GetAllUsers
-from .schemas import HTTPError, SingleUserSchema, ManyUserSchema, CreateUserRequestSchema
+from .functions import CreateUser, GetUserByUID, GetAllUsers, UpdateUser
+from .schemas import HTTPError, SingleUserSchema, ManyUserSchema, CreateUserRequestSchema, UpdateUserRequestSchema
 
 router = APIRouter(prefix='/users')
 
@@ -20,5 +20,11 @@ async def get_all_users(function: GetAllUsers = Depends(GetAllUsers)) -> ManyUse
 @router.post('/create_user', status_code=201, response_model=SingleUserSchema)
 async def create_new_user(data:CreateUserRequestSchema, function:CreateUser = Depends(CreateUser)) -> SingleUserSchema:
     '''Create new user'''
+    new_user = await function.execute(data.uid, data.username, data.display_name)
+    return new_user
+
+@router.post('/update_user', response_model=SingleUserSchema, responses={404: {'model':HTTPError}})
+async def update_user(data: UpdateUserRequestSchema, function: UpdateUser = Depends(UpdateUser)) -> SingleUserSchema:
+    '''Update a username or display_name'''
     new_user = await function.execute(data.uid, data.username, data.display_name)
     return new_user

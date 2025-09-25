@@ -76,3 +76,11 @@ class User(Base):
             raise ValueError("Amount to withdraw greater than balance.")
         self.balance -= amount
         await session.flush()
+    
+    async def update_user(self, session: AsyncSession, username:str | None, display_name:str | None):
+        if username:
+            self.username = username
+        if display_name:
+            self.display_name = display_name
+        
+        await session.flush()
