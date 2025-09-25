@@ -36,6 +36,11 @@ class SingleDoleSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class SingleDoleUpdateSchema(BaseModel):
+    uid: int
+
+    model_config = ConfigDict(from_attributes=True)
+
 class SingleBalanceRequestSchema(BaseModel):
     uid:int
     amount:int = Field(..., ge=1)

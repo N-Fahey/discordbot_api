@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from .schemas import HTTPError, SingleBalanceSchema, ManyBalanceSchema, TransferBalancesSchema, SingleDoleSchema, SingleBalanceRequestSchema, TransferAmountRequestSchema
+from .schemas import HTTPError, SingleBalanceSchema, ManyBalanceSchema, TransferBalancesSchema, SingleDoleSchema, SingleDoleUpdateSchema, SingleBalanceRequestSchema, TransferAmountRequestSchema
 from .functions import GetBalanceByUID, GetDoleByUID, UpdateDoleByUID, GetTopNBalances, DepositAmountByUID, WithdrawAmountByUID, TransferAmountByUIDs
 
 router = APIRouter(prefix='/bank')
@@ -26,9 +26,9 @@ async def get_dole_by_uid(user_id:int, function:GetDoleByUID = Depends(GetDoleBy
     return user_dole
 
 @router.post('/update_dole', response_model=SingleDoleSchema, responses={404: {'model':HTTPError}})
-async def update_dole_by_uid(user_id:int, function:UpdateDoleByUID = Depends(UpdateDoleByUID)):
+async def update_dole_by_uid(data: SingleDoleUpdateSchema, function:UpdateDoleByUID = Depends(UpdateDoleByUID)):
     '''Update a single user's last dole timestamp to now'''
-    user_dole = await function.execute(user_id)
+    user_dole = await function.execute(data.uid)
 
     return user_dole
 
