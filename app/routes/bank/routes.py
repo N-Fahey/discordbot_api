@@ -12,7 +12,7 @@ async def get_balance_by_uid(user_id:int, function: GetBalanceByUID = Depends(Ge
     return user_bank
 
 @router.get('/get_dole', response_model=SingleDoleSchema, responses={404: {'model':HTTPError}})
-async def get_dole_by_uid(user_id:int = 0, function:GetDoleByUID = Depends(GetDoleByUID)):
+async def get_dole_by_uid(user_id:int, function:GetDoleByUID = Depends(GetDoleByUID)):
     '''Get a single user's last dole timestamp'''
     user_dole = await function.execute(user_id)
 
