@@ -11,6 +11,8 @@ class HTTPError(BaseModel):
 
 class SingleBalanceSchema(BaseModel):
     uid: int
+    username: str
+    display_name:str
     balance: int
 
     model_config = ConfigDict(from_attributes=True)
