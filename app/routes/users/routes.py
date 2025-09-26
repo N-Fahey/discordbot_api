@@ -7,7 +7,7 @@ router = APIRouter(prefix='/users')
 
 @router.get('/get_user', response_model=SingleUserSchema, responses={404: {'model':HTTPError}})
 async def get_user_by_uid(user_id:int, function: GetUserByUID = Depends(GetUserByUID)) -> SingleUserSchema:
-    '''Get a single user by Discord unique ID'''
+    '''Get a single user by daCord unique ID'''
     user = await function.execute(user_id)
     return user
 

@@ -7,7 +7,7 @@ router = APIRouter(prefix='/bank')
 
 @router.get('/get_balance', response_model=SingleBalanceSchema, responses={404: {'model':HTTPError}})
 async def get_balance_by_uid(user_id:int, function: GetBalanceByUID = Depends(GetBalanceByUID)) -> SingleBalanceSchema:
-    '''Get a single user's bank balance by Discord unique ID'''
+    '''Get a single user's bank balance by daCord unique ID'''
     user_bank = await function.execute(user_id)
     return user_bank
 
@@ -34,18 +34,18 @@ async def update_dole_by_uid(data: SingleDoleUpdateSchema, function:UpdateDoleBy
 
 @router.post('/deposit', response_model=SingleBalanceSchema, responses={404: {'model':HTTPError}})
 async def deposit_by_uid(data: SingleBalanceRequestSchema, function: DepositAmountByUID = Depends(DepositAmountByUID)) -> SingleBalanceSchema:
-    '''Deposit an amount to a single user's bank balance by Discord unique ID'''
+    '''Deposit an amount to a single user's bank balance by daCord unique ID'''
     user_bank = await function.execute(data.uid, data.amount)
     return user_bank
 
 @router.post('/withdraw', response_model=SingleBalanceSchema, responses={404: {'model':HTTPError}})
 async def withdraw_by_uid(data: SingleBalanceRequestSchema, function: WithdrawAmountByUID = Depends(WithdrawAmountByUID)) -> SingleBalanceSchema:
-    '''Withdraw an amount from a single user's bank balance by Discord unique ID'''
+    '''Withdraw an amount from a single user's bank balance by daCord unique ID'''
     user_bank = await function.execute(data.uid, data.amount)
     return user_bank
 
 @router.post('/transfer', response_model=TransferBalancesSchema, responses={404: {'model':HTTPError}})
 async def transfer_by_uids(data: TransferAmountRequestSchema, function: TransferAmountByUIDs = Depends(TransferAmountByUIDs)) -> TransferBalancesSchema:
-    '''Transfer an amount from one user's balance to anothers by Discord unique IDs'''
+    '''Transfer an amount from one user's balance to anothers by daCord unique IDs'''
     transfer_result = await function.execute(data.from_uid, data.to_uid, data.amount)
     return transfer_result

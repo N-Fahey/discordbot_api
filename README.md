@@ -1,5 +1,4 @@
-# discordbot_api
-
+# daCordbot_api
 
 ```
 docker run -d \
@@ -9,5 +8,5 @@ docker run -d \
   -e "DB_PORT=port" \
   -e "DB_NAME=db_name" \
   -p 127.0.0.1:8000:8000 \
-  discordbot-api:latest
+  daCordbot-api:latest
 ```

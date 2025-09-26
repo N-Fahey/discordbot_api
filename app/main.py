@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from app.routes.main import router as api_router
 from app.auth import check_api_key
 
-app = FastAPI(title='Discordbot-API')
+app = FastAPI(title='daCordbot-API')
 
 app.include_router(api_router, dependencies=[Depends(check_api_key)])
 
