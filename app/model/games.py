@@ -18,6 +18,14 @@ class Game(Base):
         return game
     
     @classmethod
+    async def get_all_games(cls, session: AsyncSession):
+        stmt = select(Game)
+        games_stream = await session.stream_scalars(stmt)
+
+        async for game in games_stream:
+            yield game
+    
+    @classmethod
     async def add_game(cls, session: AsyncSession, game_name:str):
         new_game = cls(name=game_name)
         session.add(new_game)

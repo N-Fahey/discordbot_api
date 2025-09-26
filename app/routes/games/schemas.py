@@ -15,5 +15,10 @@ class SingleGameSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ManyGamesSchema(BaseModel):
+    games: list[SingleGameSchema]
+
+    model_config = ConfigDict(from_attributes=True)
+
 class AddGameRequestSchema(BaseModel):
     game_name: str = Field(..., min_length=1)
