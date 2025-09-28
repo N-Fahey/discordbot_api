@@ -27,9 +27,9 @@ class ManyUserSchema(BaseModel):
 class CreateUserRequestSchema(BaseModel):
     uid: int
     username: str = Field(..., min_length=2, max_length=32)
-    display_name: str = Field(..., min_length=2, max_length=32)
+    display_name: str = Field(..., min_length=1, max_length=32)
 
 class UpdateUserRequestSchema(BaseModel):
     uid: int
     username: str | None = Field(min_length=2, max_length=32)
-    display_name: str | None = Field(min_length=2, max_length=32)
+    display_name: str | None = Field(min_length=1, max_length=32)
